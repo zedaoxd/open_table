@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Rating from "../../../components/Rating";
 
 export default function RestaurantCard() {
   return (
@@ -12,7 +13,9 @@ export default function RestaurantCard() {
       <div className="pl-5">
         <h2 className="text-3xl">Aiāna Restaurant Collective</h2>
         <div className="flex items-start">
-          <div className="flex mb-2">*****</div>
+          <div className="flex mb-2">
+            <Rating value={4.9} />
+          </div>
           <p className="ml-2 text-sm">Awesome</p>
         </div>
         <div className="mb-9">
