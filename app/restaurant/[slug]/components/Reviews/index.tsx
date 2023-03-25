@@ -1,4 +1,5 @@
 import React from "react";
+import Rating from "../../../../components/Rating";
 
 export default function Reviews() {
   return (
@@ -18,7 +19,9 @@ export default function Reviews() {
             </div>
             <div className="ml-10 w-5/6">
               <div className="flex items-center">
-                <div className="flex mr-5">*****</div>
+                <div className="flex mr-5">
+                  <Rating value={5} />
+                </div>
               </div>
               <div className="mt-5">
                 <p className="text-lg font-light">
