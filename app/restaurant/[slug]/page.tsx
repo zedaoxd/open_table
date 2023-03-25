@@ -1,6 +1,5 @@
 import React from "react";
 import Description from "./components/Description";
-import Header from "./components/Header";
 import Images from "./components/Images";
 import MyRating from "./components/MyRating";
 import ReservationCard from "./components/ReservationCard";
