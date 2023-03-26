@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import React from "react";
 import Description from "./components/Description";
 import Images from "./components/Images";
-import MyRating from "./components/MyRating";
+import Rating from "./components/MyRating";
 import ReservationCard from "./components/ReservationCard";
 import RestaurantNavbar from "./components/RestaurantNavbar";
 import Reviews from "./components/Reviews";
@@ -48,11 +48,11 @@ export default async function RestaurantDetails({
   return (
     <>
       <div className="bg-white w-[70%] rounded p-3 shadow">
-        <RestaurantNavbar />
-        <Title />
-        <MyRating />
-        <Description />
-        <Images />
+        <RestaurantNavbar slug={restaurant.slug} />
+        <Title name={restaurant.name} />
+        <Rating />
+        <Description description={restaurant.description} />
+        <Images images={restaurant.images} />
         <Reviews />
       </div>
       <div className="w-[27%] relative text-reg">
