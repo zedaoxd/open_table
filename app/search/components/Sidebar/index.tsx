@@ -16,17 +16,17 @@ export default function Sidebar({
   const prices = [
     {
       price: Price.CHEAP,
-      label: "$",
+      label: "$$",
       className: "border w-full text-reg text-center font-light rounded-l p-2",
     },
     {
       price: Price.REGULAR,
-      label: "$$",
+      label: "$$$",
       className: "border w-full text-reg text-center font-light p-2",
     },
     {
       price: Price.EXPENSIVE,
-      label: "$$$",
+      label: "$$$$",
       className: "border w-full text-reg text-center font-light rounded-r p-2",
     },
   ];
