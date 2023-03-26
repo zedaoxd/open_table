@@ -1,22 +1,44 @@
+import { Cuisine, Location } from "@prisma/client";
 import React from "react";
 
-export default function Sidebar() {
+interface ISidebarProps {
+  locations: Location[];
+  cuisines: Cuisine[];
+}
+
+export default function Sidebar({ locations, cuisines }: ISidebarProps) {
   return (
     <div className="w-1/5">
       <div className="border-b pb-4">
         <h1 className="mb-2">Region</h1>
-        <p className="font-light text-reg">Toronto</p>
+        {locations.map((loc) => (
+          <p
+            key={loc.id}
+            className="font-light text-reg capitalize cursor-pointer"
+          >
+            {loc.name}
+          </p>
+        ))}
+        {/* <p className="font-light text-reg">Toronto</p>
         <p className="font-light text-reg">Ottawa</p>
         <p className="font-light text-reg">Montreal</p>
         <p className="font-light text-reg">Hamilton</p>
         <p className="font-light text-reg">Kingston</p>
-        <p className="font-light text-reg">Niagara</p>
+        <p className="font-light text-reg">Niagara</p> */}
       </div>
       <div className="border-b pb-4 mt-3">
         <h1 className="mb-2">Cuisine</h1>
-        <p className="font-light text-reg">Mexican</p>
+        {cuisines.map((c) => (
+          <p
+            key={c.id}
+            className="font-light text-reg capitalize cursor-pointer"
+          >
+            {c.name}
+          </p>
+        ))}
+        {/* <p className="font-light text-reg">Mexican</p>
         <p className="font-light text-reg">Italian</p>
-        <p className="font-light text-reg">Chinese</p>
+        <p className="font-light text-reg">Chinese</p> */}
       </div>
       <div className="mt-3 pb-4">
         <h1 className="mb-2">Price</h1>
