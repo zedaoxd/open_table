@@ -9,7 +9,8 @@ export default function SearchBar() {
 
   function onClickLetsGo() {
     if (!location) return;
-    router.push(`/search`);
+    router.push(`/search?city=${location}`);
+    setLocation("");
   }
 
   return (
