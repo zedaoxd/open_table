@@ -2,8 +2,9 @@
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { User } from "@prisma/client";
 import { useState } from "react";
-import Inputs from "./Input";
+import Inputs from "./Inputs";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,10 +17,23 @@ const style = {
   p: 4,
 };
 
-export default function AuthModal({ isSignin }: { isSignin?: boolean }) {
+export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const [inputs, setInputs] = useState<User>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    city: "",
+    password: "",
+  } as User);
 
   return (
     <div>
@@ -52,7 +66,11 @@ export default function AuthModal({ isSignin }: { isSignin?: boolean }) {
                   ? "Log Into Yout Account"
                   : "Create Your OpenTable Account"}
               </h2>
-              <Inputs />
+              <Inputs
+                inputs={inputs}
+                handleChangeInput={handleChangeInput}
+                isSignin={isSignin}
+              />
               <button className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400">
                 {isSignin ? "Sign In" : "Create Account"}
               </button>
