@@ -62,6 +62,7 @@ model User {
   first_name String
   last_name  String
   city       String
+  password   String
   email      String
   phone      String
   reviews    Review[]
