@@ -13,10 +13,10 @@ export type RestaurantCardType = {
   reviews: Review[];
 };
 
-const Prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
-  const restaurants = await Prisma.restaurant.findMany({
+  const restaurants = await prisma.restaurant.findMany({
     select: {
       id: true,
       name: true,
@@ -26,6 +26,11 @@ const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
       location: true,
       price: true,
       reviews: true,
+    },
+    orderBy: {
+      reviews: {
+        _count: "desc",
+      },
     },
   });
   return restaurants;

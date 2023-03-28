@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { calculateReviewRatingAverage } from "../../../utils/calculateReviewRatingAverage";
 import { RestaurantCardType } from "../../page";
 import Price from "../Price";
 import Rating from "../Rating";
@@ -16,9 +17,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
         <div className="p-1">
           <h3 className="font-bold text-2xl mb-2">{restaurant.name}</h3>
           <div className="flex items-start">
-            <div className="flex mb-2">
-              <Rating value={4.9} />
-            </div>
+            <Rating value={calculateReviewRatingAverage(restaurant.reviews)} />
             <p className="ml-2">
               {restaurant.reviews.length} review
               {restaurant.reviews.length > 1 && "s"}
