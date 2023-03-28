@@ -35,7 +35,7 @@ const fetchRestaurantBySlug = async (slug: string): Promise<Restaurant> => {
   });
 
   if (!restaurant) {
-    throw new Error(`No restaurant found for slug: ${slug}`);
+    throw new Error(`No restaurant found: ${slug}`);
   }
 
   return restaurant;
