@@ -1,10 +1,9 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
+import Inputs from "./Input";
 
 const style = {
   position: "absolute" as "absolute",
@@ -13,12 +12,11 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
-export default function LoginModal({ isSignin }: { isSignin?: boolean }) {
+export default function AuthModal({ isSignin }: { isSignin?: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,12 +40,24 @@ export default function LoginModal({ isSignin }: { isSignin?: boolean }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <div className="p-2">
+            <div className="uppercase font-bold text-center pb-2 border-b mb-2">
+              <p className="text-sm">
+                {isSignin ? "Sign in" : "Create Account"}
+              </p>
+            </div>
+            <div className="m-auto">
+              <h2 className="text-2xl font-light text-center">
+                {isSignin
+                  ? "Log Into Yout Account"
+                  : "Create Your OpenTable Account"}
+              </h2>
+              <Inputs />
+              <button className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400">
+                {isSignin ? "Sign In" : "Create Account"}
+              </button>
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>

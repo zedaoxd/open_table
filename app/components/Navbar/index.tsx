@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import LoginModal from "../LoginModal";
+import AuthModal from "../AuthModal";
 
 export default function Navbar() {
   return (
@@ -10,8 +10,8 @@ export default function Navbar() {
       </Link>
       <div>
         <div className="flex">
-          <LoginModal isSignin />
-          <LoginModal />
+          <AuthModal isSignin />
+          <AuthModal />
         </div>
       </div>
     </nav>
