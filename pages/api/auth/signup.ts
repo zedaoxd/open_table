@@ -68,10 +68,21 @@ export default async function handler(
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    const user = await prisma.user.create({
+      data: {
+        first_name,
+        last_name,
+        city,
+        email,
+        phone,
+        password: hashedPassword,
+      },
+    });
+
     if (userWithEmail) {
       return res.status(422).json({ errors: ["Email already in use"] });
     }
 
-    res.status(200).json({ success: "salvo" });
+    res.status(201).json({ success: "salvo" });
   }
 }
