@@ -1,6 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import validator from "validator";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -64,6 +65,8 @@ export default async function handler(
         email,
       },
     });
+
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     if (userWithEmail) {
       return res.status(422).json({ errors: ["Email already in use"] });
