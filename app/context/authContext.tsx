@@ -7,7 +7,7 @@ import { useState, createContext, Dispatch, SetStateAction } from "react";
 type State = {
   loading: boolean;
   data: Omit<User, "created_at" | "updated_at"> | null;
-  error: string | null;
+  errors: string[] | [];
 };
 
 type AuthState = {
@@ -28,11 +28,14 @@ export default function AuthContext({
   const [authState, setAuthState] = useState<State>({} as State);
 
   const signin = async (user: Pick<User, "email" | "password">) => {
+    setAuthState({ ...authState, loading: true });
     try {
       const response = await axios.post("/api/auth/signin", user);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      setAuthState({ ...authState, data: response.data });
+    } catch (error: any) {
+      setAuthState({ ...authState, errors: error.response.data.errors });
+    } finally {
+      setAuthState({ ...authState, loading: false });
     }
   };
 

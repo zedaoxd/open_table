@@ -6,6 +6,7 @@ import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Inputs from "./Inputs";
 import { useAuth } from "../../../hooks/useAuth";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const style = {
   position: "absolute" as "absolute",
@@ -22,7 +23,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { signin, signup } = useAuth();
+  const { signin, signup, loading, data, errors } = useAuth();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -89,32 +90,39 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div className="p-2">
-            <div className="uppercase font-bold text-center pb-2 border-b mb-2">
-              <p className="text-sm">
-                {isSignin ? "Sign in" : "Create Account"}
-              </p>
+          {loading && (
+            <div className="p-2 flex justify-center align-middle">
+              <CircularProgress />
             </div>
-            <div className="m-auto">
-              <h2 className="text-2xl font-light text-center">
-                {isSignin
-                  ? "Log Into Yout Account"
-                  : "Create Your OpenTable Account"}
-              </h2>
-              <Inputs
-                inputs={inputs}
-                handleChangeInput={handleChangeInput}
-                isSignin={isSignin}
-              />
-              <button
-                className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                disabled={disable}
-                onClick={handleClick}
-              >
-                {isSignin ? "Sign In" : "Create Account"}
-              </button>
+          )}
+          {!loading && (
+            <div className="p-2">
+              <div className="uppercase font-bold text-center pb-2 border-b mb-2">
+                <p className="text-sm">
+                  {isSignin ? "Sign in" : "Create Account"}
+                </p>
+              </div>
+              <div className="m-auto">
+                <h2 className="text-2xl font-light text-center">
+                  {isSignin
+                    ? "Log Into Yout Account"
+                    : "Create Your OpenTable Account"}
+                </h2>
+                <Inputs
+                  inputs={inputs}
+                  handleChangeInput={handleChangeInput}
+                  isSignin={isSignin}
+                />
+                <button
+                  className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={disable}
+                  onClick={handleClick}
+                >
+                  {isSignin ? "Sign In" : "Create Account"}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </Box>
       </Modal>
     </div>
