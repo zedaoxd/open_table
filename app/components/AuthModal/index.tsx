@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Inputs from "./Inputs";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
 const style = {
   position: "absolute" as "absolute",
