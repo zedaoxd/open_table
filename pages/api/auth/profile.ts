@@ -30,5 +30,9 @@ export default async function handler(
     },
   });
 
-  return res.status(200).json({ user });
+  if (!user) {
+    return res.status(401).json({ errors: ["Unauthorized"] });
+  }
+
+  return res.status(200).json(user);
 }

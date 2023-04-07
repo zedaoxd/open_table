@@ -2,7 +2,16 @@
 
 import { User } from "@prisma/client";
 import axios from "axios";
-import { useState, createContext, Dispatch, SetStateAction } from "react";
+import { getCookie } from "cookies-next";
+import {
+  useState,
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 
 type State = {
   loading: boolean;
@@ -76,6 +85,41 @@ export default function AuthContext({
       setAuthState((prev) => ({ ...prev, loading: false }));
     }
   };
+
+  const fecthUser = useCallback(async () => {
+    setAuthState((prev) => ({ ...prev, loading: true }));
+    try {
+      const jwt = getCookie("jwt");
+
+      if (!jwt) {
+        return setAuthState((prev) => ({ ...prev, loading: false }));
+      }
+
+      const response = await axios.get("/api/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+
+      setAuthState((prev) => ({
+        ...prev,
+        data: response.data,
+        loading: false,
+      }));
+    } catch (error: any) {
+      setAuthState((prev) => ({
+        ...prev,
+        error: error.response.data.error,
+        loading: false,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    fecthUser();
+  }, []);
 
   return (
     <AuthenticationContext.Provider
