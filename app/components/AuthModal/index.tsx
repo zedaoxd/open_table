@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Inputs from "./Inputs";
+import useAuth from "../../../hooks/useAuth";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,6 +22,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { signin, signup } = useAuth();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,6 +61,14 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
       }
     }
   }, [inputs]);
+
+  const handleClick = () => {
+    if (isSignin) {
+      signin(inputs);
+    } else {
+      signup(inputs);
+    }
+  };
 
   return (
     <div>
@@ -99,6 +109,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
               <button
                 className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 disabled={disable}
+                onClick={handleClick}
               >
                 {isSignin ? "Sign In" : "Create Account"}
               </button>
