@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { createJwtToken } from "../../../utils/createJwtToken";
+import { setCookie } from "cookies-next";
 
 const prisma = new PrismaClient();
 
@@ -67,6 +68,10 @@ export default async function handler(
       },
     });
 
+    if (userWithEmail) {
+      return res.status(422).json({ error: "Email already in use" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({
@@ -80,13 +85,18 @@ export default async function handler(
       },
     });
 
-    if (userWithEmail) {
-      return res.status(422).json({ errors: ["Email already in use"] });
-    }
-
     const token = await createJwtToken(user);
 
-    res.status(201).json({ token });
+    setCookie("jwt", token, { req, res, maxAge: 3600 });
+
+    return res.status(201).json({
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+      token,
+    });
   }
 
   return res.status(404).json({ message: "Not Found" });

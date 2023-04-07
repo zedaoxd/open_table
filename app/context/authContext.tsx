@@ -19,7 +19,8 @@ type AuthState = {
   ) => Promise<void>;
 
   signup: (
-    user: Omit<User, "created_at" | "updated_at" | "id">
+    user: Omit<User, "created_at" | "updated_at" | "id">,
+    onSuccess?: () => void
   ) => Promise<void>;
 } & State;
 
@@ -57,8 +58,24 @@ export default function AuthContext({
   };
 
   const signup = async (
-    user: Omit<User, "created_at" | "updated_at" | "id">
-  ) => {};
+    user: Omit<User, "created_at" | "updated_at" | "id">,
+    onSuccess?: () => void
+  ) => {
+    setAuthState((prev) => ({ ...prev, loading: true }));
+
+    try {
+      const response = await axios.post("/api/auth/signup", user);
+      setAuthState((prev) => ({ ...prev, data: response.data }));
+      onSuccess && onSuccess();
+    } catch (error: any) {
+      setAuthState((prev) => ({
+        ...prev,
+        error: error.response.data.error,
+      }));
+    } finally {
+      setAuthState((prev) => ({ ...prev, loading: false }));
+    }
+  };
 
   return (
     <AuthenticationContext.Provider

@@ -68,7 +68,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
     if (isSignin) {
       signin(inputs, handleClose);
     } else {
-      signup(inputs);
+      signup(inputs, handleClose);
     }
   };
 
