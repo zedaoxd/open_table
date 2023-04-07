@@ -2,7 +2,7 @@
 
 import { User } from "@prisma/client";
 import axios from "axios";
-import { getCookie } from "cookies-next";
+import { getCookie, removeCookies } from "cookies-next";
 import {
   useState,
   createContext,
@@ -31,6 +31,8 @@ type AuthState = {
     user: Omit<User, "created_at" | "updated_at" | "id">,
     onSuccess?: () => void
   ) => Promise<void>;
+
+  sigout: () => Promise<void>;
 } & State;
 
 export const AuthenticationContext = createContext<AuthState>({} as AuthState);
@@ -86,6 +88,11 @@ export default function AuthContext({
     }
   };
 
+  const sigout = async () => {
+    removeCookies("jwt");
+    setAuthState((prev) => ({ ...prev, data: null }));
+  };
+
   const fecthUser = useCallback(async () => {
     setAuthState((prev) => ({ ...prev, loading: true }));
     try {
@@ -123,7 +130,7 @@ export default function AuthContext({
 
   return (
     <AuthenticationContext.Provider
-      value={{ ...authState, setAuthState, signin, signup }}
+      value={{ ...authState, setAuthState, signin, signup, sigout }}
     >
       {children}
     </AuthenticationContext.Provider>
