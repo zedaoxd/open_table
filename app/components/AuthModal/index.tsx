@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Inputs from "./Inputs";
 import { useAuth } from "../../../hooks/useAuth";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Alert } from "@mui/material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -23,7 +24,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { signin, signup, loading, data, errors } = useAuth();
+  const { signin, signup, loading, data, error } = useAuth();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -97,6 +98,11 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
           )}
           {!loading && (
             <div className="p-2">
+              {error && (
+                <Alert severity="error" className="mb-4">
+                  {error}
+                </Alert>
+              )}
               <div className="uppercase font-bold text-center pb-2 border-b mb-2">
                 <p className="text-sm">
                   {isSignin ? "Sign in" : "Create Account"}
