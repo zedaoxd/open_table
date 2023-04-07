@@ -12,7 +12,12 @@ type State = {
 
 type AuthState = {
   setAuthState: Dispatch<SetStateAction<State>>;
-  signin: (user: Pick<User, "email" | "password">) => Promise<void>;
+
+  signin: (
+    user: Pick<User, "email" | "password">,
+    onSuccess?: () => void
+  ) => Promise<void>;
+
   signup: (
     user: Omit<User, "created_at" | "updated_at" | "id">
   ) => Promise<void>;
@@ -29,13 +34,18 @@ export default function AuthContext({
     loading: false,
     data: null,
     error: null,
-  } as State);
+  });
 
-  const signin = async (user: Pick<User, "email" | "password">) => {
+  const signin = async (
+    user: Pick<User, "email" | "password">,
+    onSuccess?: () => void
+  ) => {
     setAuthState((prev) => ({ ...prev, loading: true }));
+
     try {
       const response = await axios.post("/api/auth/signin", user);
       setAuthState((prev) => ({ ...prev, data: response.data }));
+      onSuccess && onSuccess();
     } catch (error: any) {
       setAuthState((prev) => ({
         ...prev,

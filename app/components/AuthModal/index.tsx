@@ -24,7 +24,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { signin, signup, loading, data, error } = useAuth();
+  const { signin, signup, loading, error } = useAuth();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -66,7 +66,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
 
   const handleClick = () => {
     if (isSignin) {
-      signin(inputs);
+      signin(inputs, handleClose);
     } else {
       signup(inputs);
     }

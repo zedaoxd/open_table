@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { createJwtToken } from "../../../utils/createJwtToken";
+import { setCookie } from "cookies-next";
 
 const prisma = new PrismaClient();
 
@@ -37,28 +38,34 @@ export default async function Signin(
       return res.status(422).json({ errors });
     }
 
-    const userWithEmail = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         email,
       },
     });
 
-    if (!userWithEmail) {
+    if (!user) {
       return res.status(404).json({ errors: ["User not found"] });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      userWithEmail.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ errors: ["Email or password is invalid"] });
     }
 
-    const token = await createJwtToken(userWithEmail);
+    const token = await createJwtToken(user);
 
-    return res.status(200).json({ token });
+    setCookie("jwt", token, { req, res, maxAge: 3600 });
+
+    return res.status(200).json({
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+      token,
+    });
   }
 
   return res.status(404).json({ message: "Not Found" });
