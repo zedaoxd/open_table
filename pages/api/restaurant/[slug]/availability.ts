@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { times } from "../../../../data";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 type QueryParams = {
   slug: string;
@@ -22,13 +25,27 @@ export default async function handler(
     return res.status(422).json({ error: "Missing query params" });
   }
 
-  const searchTimes = times.find((t) => t.time === time);
+  const searchTimes = times.find((t) => t.time === time)?.searchTimes;
 
   if (!searchTimes) {
     return res.status(422).json({ error: "Invalid time" });
   }
 
-  return res.status(200).json(searchTimes);
+  const bookings = await prisma.booking.findMany({
+    where: {
+      booking_time: {
+        gte: new Date(`${day}T${searchTimes[0]}`),
+        lte: new Date(`${day}T${searchTimes[searchTimes.length - 1]}`),
+      },
+    },
+    select: {
+      number_of_people: true,
+      booking_time: true,
+      tables: true,
+    },
+  });
+
+  return res.status(200).json({ searchTimes, bookings });
 }
 
-// http://localhost:3000/api/restaurant/coconut-lagoon-ottawa/availability
+// http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability
