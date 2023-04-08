@@ -1,16 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { partySize } from "../../../../../data";
+import { partySize, times } from "../../../../../data";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function ReservationCard() {
+type Props = {
+  openTime: string;
+  closeTime: string;
+};
+
+export default function ReservationCard({ openTime, closeTime }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   const handleChangeDate = (date: Date | null) => {
     if (date) return setSelectedDate(date);
     return setSelectedDate(null);
+  };
+
+  const filterTimeByRestaurantOpenWindow = () => {
+    const timesWithInWindow: typeof times = [];
+    let isWithinWindow = false;
+    times.forEach((time) => {
+      if (time.time === openTime) isWithinWindow = true;
+      if (isWithinWindow) timesWithInWindow.push(time);
+      if (time.time === closeTime) isWithinWindow = false;
+    });
+    return timesWithInWindow;
   };
 
   return (
@@ -42,8 +58,11 @@ export default function ReservationCard() {
         <div className="flex flex-col w-[48%]">
           <label htmlFor="">Time</label>
           <select name="" id="" className="py-3 border-b font-light">
-            <option value="">7:30 AM</option>
-            <option value="">9:30 AM</option>
+            {filterTimeByRestaurantOpenWindow().map(({ time, displayTime }) => (
+              <option key={time} value={time}>
+                {displayTime}
+              </option>
+            ))}
           </select>
         </div>
       </div>
