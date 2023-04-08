@@ -5,19 +5,24 @@ type Props = {
   slug: string;
   day: string;
   time: string;
-  partySize: string;
+  partySize: number;
+};
+
+type Availabity = {
+  time: string;
+  available: boolean;
 };
 
 export default function useAvailabities() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<Availabity[] | null>(null);
 
   const fetchAvailabities = async ({ day, partySize, slug, time }: Props) => {
     setLoading(true);
 
     try {
-      const response = await axios.get(
+      const response = await axios.get<Availabity[]>(
         `http://localhost:3000/api/restaurant/${slug}/availability`,
         {
           params: {
