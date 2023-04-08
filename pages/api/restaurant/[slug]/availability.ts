@@ -89,13 +89,15 @@ export default async function handler(
     });
   });
 
-  return res.status(200).json({
-    searchTimes,
-    bookings,
-    bookingTablesObj,
-    tables,
-    searchTimesWithTables,
+  const availabilities = searchTimesWithTables.map((t) => {
+    const sumSeats = t.tables.reduce((sum, table) => sum + table.seats, 0);
+    return {
+      time: t.time,
+      available: sumSeats >= Number(partySize),
+    };
   });
+
+  return res.status(200).json(availabilities);
 }
 
 // http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability
