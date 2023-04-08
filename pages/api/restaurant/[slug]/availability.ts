@@ -78,6 +78,17 @@ export default async function handler(
     tables,
   }));
 
+  searchTimesWithTables.forEach((t) => {
+    t.tables = t.tables.filter((table) => {
+      if (bookingTablesObj[t.date.toISOString()]) {
+        if (bookingTablesObj[t.date.toISOString()][table.id]) {
+          return false;
+        }
+      }
+      return true;
+    });
+  });
+
   return res.status(200).json({
     searchTimes,
     bookings,
