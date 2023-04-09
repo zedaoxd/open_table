@@ -5,6 +5,8 @@ import { partySize as partySizes, times } from "../../../../../data";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useAvailabities from "../../../../../hooks/useAvailabities";
+import { CircularProgress } from "@mui/material";
+import Link from "next/link";
 
 type Props = {
   openTime: string;
@@ -102,10 +104,30 @@ export default function ReservationCard({ openTime, closeTime, slug }: Props) {
         <button
           className="bg-red-600 rounded w-full px-4 text-white font-bold h-16"
           onClick={handleClickFindTime}
+          disabled={loading}
         >
-          Find a Time
+          {loading ? <CircularProgress color="inherit" /> : "Find a time"}
         </button>
       </div>
+      {data && data.length > 0 && (
+        <div className="mt-4">
+          <p className="text-reg">Select a Time</p>
+          <div className="flex flex-wrap mt-2">
+            {data.map((time) =>
+              time.available ? (
+                <Link
+                  href={`/reserve/${slug}?date=${day}T${time.time}&partySize=${partySize}`}
+                  className="bg-red-600 cursor-pointer p-2 w-24 text-center text-white mb-3 rounded mr-3"
+                >
+                  <p className="text-sm font-bold">{time.time}</p>
+                </Link>
+              ) : (
+                <p className="bg-gray-300 p-2 w-24 mb-3 rounded mr-3"></p>
+              )
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
