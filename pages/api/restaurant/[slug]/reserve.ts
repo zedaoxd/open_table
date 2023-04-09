@@ -71,5 +71,28 @@ export default async function handler(
     if (table.seats === 4) tablesCount[4].push(table.id);
   });
 
-  res.status(200).json({ tablesCount });
+  const tablesToBook: number[] = [];
+  let seatsRemaining = Number(partySize);
+
+  while (seatsRemaining > 0) {
+    if (seatsRemaining >= 3) {
+      if (tablesCount[4].length > 0) {
+        tablesToBook.push(tablesCount[4].shift() as number);
+        seatsRemaining -= 4;
+      } else {
+        tablesToBook.push(tablesCount[2].shift() as number);
+        seatsRemaining -= 2;
+      }
+    } else {
+      if (tablesCount[2].length > 0) {
+        tablesToBook.push(tablesCount[2].shift() as number);
+        seatsRemaining -= 2;
+      } else {
+        tablesToBook.push(tablesCount[4].shift() as number);
+        seatsRemaining -= 4;
+      }
+    }
+  }
+
+  res.status(200).json({ tablesToBook });
 }
