@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+import useReservation from "../../../../../hooks/useReservation";
+import { CircularProgress } from "@mui/material";
 
 const schema = z.object({
   bookerFirstName: z.string().min(1),
@@ -15,7 +17,14 @@ const schema = z.object({
 
 type FormType = z.infer<typeof schema>;
 
-export default function Form() {
+type Props = {
+  day: string;
+  partySize: string;
+  time: string;
+  slug: string;
+};
+
+export default function Form({ day, partySize, slug, time }: Props) {
   const {
     handleSubmit,
     register,
@@ -26,10 +35,12 @@ export default function Form() {
     resolver: zodResolver(schema),
   });
 
+  const { createReservation, error, loading } = useReservation();
+
   const onSubmit = handleSubmit((data) => {
     try {
-      const result = schema.parse(data);
-      // TODO: Send data to backend
+      const body = schema.parse(data);
+      createReservation({ day, body, partySize, time, slug });
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.log(error.formErrors);
@@ -98,10 +109,14 @@ export default function Form() {
           />
         </div>
         <button
-          disabled={!isValid}
+          disabled={!isValid || loading}
           className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300"
         >
-          Complete reservation
+          {loading ? (
+            <CircularProgress color="inherit" />
+          ) : (
+            "Complete reservation"
+          )}
         </button>
         <p className="mt-4 text-sm">
           By clicking “Complete reservation” you agree to the OpenTable Terms of

@@ -5,14 +5,14 @@ type Props = {
   slug: string;
   day: string;
   time: string;
-  partySize: number;
+  partySize: string;
   body: {
-    bookerEmail: string;
-    bookerPhone: string;
     bookerFirstName: string;
     bookerLastName: string;
-    bookerOccasion?: string;
-    bookerRequest?: string;
+    bookerPhone: string;
+    bookerEmail: string;
+    bookerOccasion?: string | undefined;
+    bookerRequest?: string | undefined;
   };
 };
 

@@ -31,6 +31,7 @@ type Props = {
 
 export default async function Reserve({ params, searchParams }: Props) {
   const restaurant = await fecthRestaurantBySlug(params.slug);
+  const [day, time] = searchParams.date.split("T");
   return (
     <div className="border-t h-screen">
       <div className="py-9 w-3/5 m-auto">
@@ -40,7 +41,12 @@ export default async function Reserve({ params, searchParams }: Props) {
           date={searchParams.date}
           partySize={searchParams.partySize}
         />
-        <Form />
+        <Form
+          day={day}
+          slug={params.slug}
+          partySize={searchParams.partySize}
+          time={time}
+        />
       </div>
     </div>
   );
