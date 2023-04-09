@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { Time } from "../utils/convertToDisplayTime";
 
 type Props = {
   slug: string;
@@ -9,7 +10,7 @@ type Props = {
 };
 
 type Availabity = {
-  time: string;
+  time: Time;
   available: boolean;
 };
 
