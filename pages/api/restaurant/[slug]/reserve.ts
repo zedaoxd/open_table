@@ -58,5 +58,18 @@ export default async function handler(
     return res.status(400).json({ error: "No availability, cannot book" });
   }
 
-  res.status(200).json({ searchTimeWithTables });
+  const tablesCount: {
+    2: number[];
+    4: number[];
+  } = {
+    2: [],
+    4: [],
+  };
+
+  searchTimeWithTables.tables.forEach((table) => {
+    if (table.seats === 2) tablesCount[2].push(table.id);
+    if (table.seats === 4) tablesCount[4].push(table.id);
+  });
+
+  res.status(200).json({ tablesCount });
 }
