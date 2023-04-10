@@ -30,17 +30,13 @@ export default function useReservation() {
     setLoading(true);
 
     try {
-      return await axios.post(
-        `http://localhost:3000/api/restaurant/${slug}/reserve`,
-        body,
-        {
-          params: {
-            day,
-            partySize,
-            time,
-          },
-        }
-      );
+      return await axios.post(`/api/restaurant/${slug}/reserve`, body, {
+        params: {
+          day,
+          partySize,
+          time,
+        },
+      });
     } catch (e: any) {
       setError(e.response.data.error);
     } finally {

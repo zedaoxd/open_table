@@ -20,8 +20,6 @@ type BodyParams = {
   bookerRequest: string;
 };
 
-// http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/reserve?day=2021-08-01&time=18:00&partySize=2
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
