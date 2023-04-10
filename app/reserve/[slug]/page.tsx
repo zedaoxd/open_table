@@ -3,6 +3,7 @@ import Form from "./components/Form";
 import Header from "./components/Header";
 import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 const prisma = new PrismaClient();
 
@@ -27,6 +28,11 @@ type Props = {
     date: string;
     partySize: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: "Reserve",
+  description: "Reserve a table at a restaurant",
 };
 
 export default async function Reserve({ params, searchParams }: Props) {

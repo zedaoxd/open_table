@@ -1,6 +1,14 @@
+import { Metadata } from "next";
 import Navbar from "./components/Navbar";
 import AuthContext from "./context/authContext";
 import "./globals.css";
+
+export const metadata: Metadata = {
+  title: {
+    default: "OpenTable",
+    template: "%s | OpenTable",
+  },
+};
 
 export default function RootLayout({
   children,

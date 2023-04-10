@@ -2,6 +2,7 @@ import { Price, PrismaClient } from "@prisma/client";
 import Header from "./components/Header";
 import RestaurantCard from "./components/RestaurantCard";
 import Sidebar from "./components/Sidebar";
+import { Metadata } from "next";
 
 const prisma = new PrismaClient();
 
@@ -62,7 +63,7 @@ const fetchCuisines = async () => {
   return prisma.cuisine.findMany();
 };
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Search",
   description: "Search for restaurants",
 };

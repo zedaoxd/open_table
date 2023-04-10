@@ -8,6 +8,7 @@ import ReservationCard from "./components/ReservationCard";
 import RestaurantNavbar from "./components/RestaurantNavbar";
 import Reviews from "./components/Reviews";
 import Title from "./components/Title";
+import { Metadata } from "next";
 
 const prisma = new PrismaClient();
 
@@ -45,6 +46,17 @@ const fetchRestaurantBySlug = async (slug: string): Promise<Restaurant> => {
 
   return restaurant;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const restaurant = await fetchRestaurantBySlug(params.slug);
+  return {
+    title: restaurant.name,
+  };
+}
 
 export default async function RestaurantDetails({
   params,
