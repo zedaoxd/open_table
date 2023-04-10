@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import useReservation from "../../../../../hooks/useReservation";
 import { CircularProgress } from "@mui/material";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   bookerFirstName: z.string().min(1),
@@ -29,6 +30,7 @@ export default function Form({ day, partySize, slug, time }: Props) {
     handleSubmit,
     register,
     formState: { errors, isValid },
+    reset,
   } = useForm<FormType>({
     mode: "all",
     reValidateMode: "onChange",
@@ -40,7 +42,24 @@ export default function Form({ day, partySize, slug, time }: Props) {
   const onSubmit = handleSubmit((data) => {
     try {
       const body = schema.parse(data);
-      createReservation({ day, body, partySize, time, slug });
+      createReservation({ day, body, partySize, time, slug }).then((r) => {
+        if (r) {
+          Swal.fire({
+            title: "Success!",
+            text: "Your reservation has been created",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          reset();
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.log(error.formErrors);
