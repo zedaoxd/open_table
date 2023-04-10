@@ -72,7 +72,9 @@ export default async function Search({
 }: {
   searchParams: SearchParams;
 }) {
+  console.log(searchParams);
   const restaurants = await fetchRestaurantsByCity(searchParams);
+  console.log(restaurants);
   const location = await fetchLocations();
   const cuisine = await fetchCuisines();
   return (
